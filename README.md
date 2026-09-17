@@ -1,2 +1,4 @@
 # assessment-analysis
-for analyzing and visualizing functional assessment results
+For analyzing and visualizing functional assessment results. Assessments include:
+- Box and Blocks
+- 
