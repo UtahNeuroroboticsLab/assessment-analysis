@@ -1,18 +1,18 @@
-## Reads all xcel files in given directory, pulls out box and blocks results, and returns as a table
-## MAT 20260916
+## Reads all excel files in a given directory, parses for CRT results and returns a dataframe of the data
+## 20260917 MAT
 
-import pathlib
 import polars as pl
 import datetime as dt
+import pathlib
 import sys
 
 
-def analyzeBB(folder_path):
+def analyzeCRT(folder_path):
 
     # init pl dataframe
-    my_data = pl.DataFrame()
+    my_data = pl.Dataframe()
 
-    # date of implant
+    # implant date
     implant_date = dt.date.strptime("20260129", "%Y%m%d")
 
     # get path incrementer
@@ -30,26 +30,23 @@ def analyzeBB(folder_path):
         date_str = date_str[0]
         date_str = dt.date.strptime(date_str, "%Y%m%d")
 
-        # get days since implant
+        # get days since implant(dsi)
         dsi = date_str - implant_date
         dsi = dsi.days
         dsi = pl.DataFrame({"DSI": dsi})
-        # append to match size of temp_data
-        for i in range(len(temp_data) - 1):
-            dsi = pl.concat([dsi, dsi], how="vertical")
 
         # add dsi to temp_data
-        temp_data = pl.concat([dsi, temp_data], how="horizontal")
+        temp_data = pl.concat([temp_data, dsi], how="horizontal")
 
-        # concat to output
+        # add data to main
         my_data = pl.concat([my_data, temp_data], how="vertical")
 
-    # sort data by data
+    # sort data by dsi
     my_data.sort("DSI")
     return my_data
 
 
 if __name__ == "main":
     my_path = repr(sys.argv[1])
-    my_data = analyzeBB(my_path)
+    my_data = analyzeCRT(my_path)
     print(my_data)
