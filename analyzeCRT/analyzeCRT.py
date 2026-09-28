@@ -10,7 +10,7 @@ import sys
 def analyzeCRT(folder_path):
 
     # init pl dataframe
-    my_data = pl.Dataframe()
+    my_data = pl.DataFrame()
 
     # implant date
     implant_date = dt.date.strptime("20260129", "%Y%m%d")
@@ -24,6 +24,9 @@ def analyzeCRT(folder_path):
         # read table
         temp_data = pl.read_excel(my_path)
 
+        # cast time to floats
+        temp_data = temp_data.select(pl.col("Case"), pl.col("Time").cast(pl.Float32))
+
         # get date from file name
         date_str = str(my_path.name)
         date_str = date_str.split("-")
@@ -34,15 +37,22 @@ def analyzeCRT(folder_path):
         dsi = date_str - implant_date
         dsi = dsi.days
         dsi = pl.DataFrame({"DSI": dsi})
+        dsi_all = dsi
+        # append to match size of temp_data
+        for i in range(len(temp_data) - 1):
+            dsi_all = pl.concat([dsi_all, dsi], how="vertical")
 
         # add dsi to temp_data
-        temp_data = pl.concat([temp_data, dsi], how="horizontal")
+        temp_data = pl.concat([temp_data, dsi_all], how="horizontal")
 
         # add data to main
         my_data = pl.concat([my_data, temp_data], how="vertical")
 
     # sort data by dsi
     my_data.sort("DSI")
+    # remove nulls
+    my_data.drop_nulls()
+
     return my_data
 
 

@@ -34,12 +34,13 @@ def analyzeBB(folder_path):
         dsi = date_str - implant_date
         dsi = dsi.days
         dsi = pl.DataFrame({"DSI": dsi})
+        dsi_all = dsi
         # append to match size of temp_data
         for i in range(len(temp_data) - 1):
-            dsi = pl.concat([dsi, dsi], how="vertical")
+            dsi_all = pl.concat([dsi_all, dsi], how="vertical")
 
         # add dsi to temp_data
-        temp_data = pl.concat([dsi, temp_data], how="horizontal")
+        temp_data = pl.concat([dsi_all, temp_data], how="horizontal")
 
         # concat to output
         my_data = pl.concat([my_data, temp_data], how="vertical")

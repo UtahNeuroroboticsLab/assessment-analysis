@@ -3,6 +3,8 @@
 
 import matplotlib.pyplot as plt
 import analyzeCRT as crt
+from scatterLinePlot import scatterLinePlot as slp
+import polars as pl
 
 # hardcoded folder path for now
 folder_path = (
@@ -10,21 +12,28 @@ folder_path = (
 )
 
 # analyze data
-my_data = crt.analyze_crt(folder_path)
+my_data = crt.analyzeCRT(folder_path)
 
-# plot data
+# split into ups and downs
+up_data = my_data.filter(pl.col("Case") == "up")
+down_data = my_data.filter(pl.col("Case") == "down")
+
+# plot up data
 print(my_data)
-plt.scatter(my_data["DSI"].to_numpy(), my_data["Time"].to_numpy())
-
-plt.xlabel("DSI")
-plt.ylabel("Blocks")
-plt.title("Blocks")
-plt.show()
-plt.savefig(
-    r"C:\Users\Marshall\Box\Implant Trial\Data\p202601\Analysis\BoxAndBlocks\bb.eps",
-    format="eps",
+slp(
+    up_data["DSI"].to_numpy(),
+    up_data["Time"].to_numpy(),
+    title="CRT UP",
+    x_label="DSI",
+    y_label="Transfer Time (s)",
+    save_path=r"C:\Users\Marshall\Box\Implant Trial\Data\p202601\Analysis\CRT",
 )
-plt.savefig(
-    r"C:\Users\Marshall\Box\Implant Trial\Data\p202601\Analysis\BoxAndBlocks\bb.png",
-    format="png",
+
+slp(
+    down_data["DSI"].to_numpy(),
+    down_data["Time"].to_numpy(),
+    title="CRT Down",
+    x_label="DSI",
+    y_label="Transfer Time (s)",
+    save_path=r"C:\Users\Marshall\Box\Implant Trial\Data\p202601\Analysis\CRT",
 )
