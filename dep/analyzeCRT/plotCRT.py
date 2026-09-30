@@ -2,9 +2,13 @@
 ## MAT 20260917
 
 import matplotlib.pyplot as plt
-import analyzeCRT as crt
-from scatterLinePlot import scatterLinePlot as slp
 import polars as pl
+import sys
+
+sys.path.append("../dep")
+sys.path.append("../analyzeCRT")
+import dep.analyzeCRT.analyzeCRT as crt
+from scatterLinePlot import scatterLinePlot as slp
 
 # hardcoded folder path for now
 folder_path = (
