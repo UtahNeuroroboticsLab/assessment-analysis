@@ -7,7 +7,7 @@ import sys
 
 sys.path.append("../dep")
 sys.path.append("../analyzeCRT")
-import dep.analyzeCRT.analyzeCRT as crt
+import analyzeCRT as crt
 from scatterLinePlot import scatterLinePlot as slp
 
 # hardcoded folder path for now

@@ -2,8 +2,8 @@
 ## MAT 20260916
 
 import matplotlib.pyplot as plt
-import dep.analyzeBoxBlocks.analyzeBoxBlocks as abb
-from mains.scatterLinePlot import scatterLinePlot as slp
+import analyzeBoxBlocks as abb
+from scatterLinePlot import scatterLinePlot as slp
 
 # hardcoded folder path for now
 folder_path = (
@@ -11,13 +11,13 @@ folder_path = (
 )
 
 # analyze data
-my_data = abb.analyze_bb(folder_path)
+my_data = abb.analyzeBB(folder_path)
 
 # plot data
 print(my_data)
 slp(
-    up_data["DSI"].to_numpy(),
-    up_data["Blocks"].to_numpy(),
+    my_data["DSI"].to_numpy(),
+    my_data["Blocks"].to_numpy(),
     title="BB",
     x_label="DSI",
     y_label="Blocks",
